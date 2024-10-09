@@ -14,9 +14,6 @@ jobs:
       - name: Set user
         working-directory: unit-test-security-rules-v9
         run: sudo chown 1000:1000 -R .
-      - name: Launch Firestore emulator
-        working-directory: unit-test-security-rules-v9
-        run: docker-compose up -d
       - name: Run tests
         working-directory: unit-test-security-rules-v9
         run: docker run --rm -v $(pwd):/firestore motomotomato/firestore-emulator "emulators:exec" "--only" "firestore" "npm install && npm run test-firestore"
