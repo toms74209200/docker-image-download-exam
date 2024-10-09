@@ -1,0 +1,19 @@
+name: Docker image install from GitHub repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: firebase/quickstart-testing
+          sparse-checkout: unit-test-security-rules-v9
+      - name: Set user
+        working-directory: unit-test-security-rules-v9
+        run: sudo chown 1000:1000 -R .
+      - name: Run tests
+        working-directory: unit-test-security-rules-v9
+        run: docker run --rm -v $(pwd):/firestore ghcr.io/toms74209200/docker-firestore-emulator "emulators:exec" "--only" "firestore" "npm install && npm run test-firestore"
