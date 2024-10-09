@@ -1,0 +1,23 @@
+name: ESP-IDF build from Docker Hub
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: motomotomato/esp-idf-devcontainer
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: espressif/esp-idf
+          sparse-checkout: examples/get-started/hello_world
+      - name: Set user
+        working-directory: examples/get-started/hello_world
+        run: sudo chown 1000:1000 -R .
+      - name: Move ESP-IDF cache
+        run: mv /home/vscode/.espressif ${{ runner.home }}
+      - name: build
+        working-directory: examples/get-started/hello_world
+        run: idf build
