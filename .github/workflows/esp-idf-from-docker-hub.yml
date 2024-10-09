@@ -16,8 +16,8 @@ jobs:
       - name: Set user
         working-directory: examples/get-started/hello_world
         run: sudo chown 1000:1000 -R .
-      - name: Move ESP-IDF cache
-        run: mv /home/vscode/.espressif ${{ runner.home }}
       - name: build
         working-directory: examples/get-started/hello_world
-        run: idf build
+        run: python3 /opt/esp-idf/tools/idf_tools.py install-python-env && python3 /opt/esp-idf/tools/idf_tools.py install && . /opt/esp-idf/export.sh && /opt/esp-idf/tools/idf.py build
+        env:
+          IDF_PATH: /opt/esp-idf
