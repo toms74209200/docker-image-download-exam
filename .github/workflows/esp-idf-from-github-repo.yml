@@ -1,0 +1,23 @@
+name: ESP-IDF build from GitHub repository
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/toms74209200/docker-esp-idf-devcontainer
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: espressif/esp-idf
+          sparse-checkout: examples/get-started/hello_world
+      - name: Set user
+        working-directory: examples/get-started/hello_world
+        run: sudo chown 1000:1000 -R .
+      - name: build
+        working-directory: examples/get-started/hello_world
+        run: python3 /opt/esp-idf/tools/idf_tools.py install-python-env && python3 /opt/esp-idf/tools/idf_tools.py install && . /opt/esp-idf/export.sh && /opt/esp-idf/tools/idf.py build
+        env:
+          IDF_PATH: /opt/esp-idf
